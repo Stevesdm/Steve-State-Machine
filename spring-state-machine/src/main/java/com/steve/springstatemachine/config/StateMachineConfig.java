@@ -48,35 +48,38 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States
                 .source(States.WAITING_FOR_RECEIVE).target(States.DONE)
                 .event(Events.RECEIVE);
     }
-    @Override
-    public void configure(StateMachineConfigurationConfigurer<States, Events> config)
-            throws Exception {
-        config
-                .withConfiguration()
-                .listener(listener());
-    }
-    @Bean
-    public StateMachineListener<States, Events> listener() {
-        return new StateMachineListenerAdapter<States, Events>() {
-            @Override
-            public void transition(Transition<States, Events> transition) {
-                if(transition.getTarget().getId() == States.UNPAID) {
-                    logger.info("订单创建，待支付");
-                    return;
-                }
-                if(transition.getSource().getId() == States.UNPAID
-                        && transition.getTarget().getId() == States.WAITING_FOR_RECEIVE) {
-                    logger.info("用户完成支付，待收货");
-                    return;
-                }
-                if(transition.getSource().getId() == States.WAITING_FOR_RECEIVE
-                        && transition.getTarget().getId() == States.DONE) {
-                    logger.info("用户已收货，订单完成");
-                    return;
-                }
-            }
-        };
-    }
+
+//以下代码可通过配置进行
+
+//    @Override
+//    public void configure(StateMachineConfigurationConfigurer<States, Events> config)
+//            throws Exception {
+//        config
+//                .withConfiguration()
+//                .listener(listener());
+//    }
+//    @Bean
+//    public StateMachineListener<States, Events> listener() {
+//        return new StateMachineListenerAdapter<States, Events>() {
+//            @Override
+//            public void transition(Transition<States, Events> transition) {
+//                if(transition.getTarget().getId() == States.UNPAID) {
+//                    logger.info("订单创建，待支付");
+//                    return;
+//                }
+//                if(transition.getSource().getId() == States.UNPAID
+//                        && transition.getTarget().getId() == States.WAITING_FOR_RECEIVE) {
+//                    logger.info("用户完成支付，待收货");
+//                    return;
+//                }
+//                if(transition.getSource().getId() == States.WAITING_FOR_RECEIVE
+//                        && transition.getTarget().getId() == States.DONE) {
+//                    logger.info("用户已收货，订单完成");
+//                    return;
+//                }
+//            }
+//        };
+//    }
 
 
 }
